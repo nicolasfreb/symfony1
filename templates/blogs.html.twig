@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>{{ titre }}</h1>
+    <p>{{ contenu }}</p>
+    <ul>
+    {% for key, ListBlog in ListBlogs %}
+        <li><a href="blog/{{key}}">{{ListBlog}}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

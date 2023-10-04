@@ -1,0 +1,16 @@
+#header > img{
+    width: 100%;
+}
+#contenu{
+    padding:50px 10px 50px 10px;
+    background-color: #DDDDDD;
+}
+#contenu h1{
+    text-align:center;
+}
+#footer *{
+    max-width:100% !important;
+}
+#footer .container{
+    padding: 0 !important;
+}
