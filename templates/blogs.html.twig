@@ -1,10 +1,28 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+    #listBlog form{
+        display:inline-block !important;
+        text-color:red;
+    }
+    #listBlog input{
+       padding:0;
+        margin:0;
+        border:0;
+        background:none;
+        color:red;
+    }
+    </style>
+{% endblock %}
 {% block body %}
-    <h1>{{ titre }}</h1>
-    <p>{{ contenu }}</p>
-    <ul>
-    {% for key, ListBlog in ListBlogs %}
-        <li><a href="blog/{{key}}">{{ListBlog}}</a></li>
-    {% endfor %}
-    </ul>
+    <div id="listBlog">
+        <h1>{{ titre }}</h1>
+        <p>{{ contenu }}</p>
+        <ul>
+        {% for ListBlog in ListBlogs %}
+            <li><a href="blog/{{ListBlog.id}}">{{ListBlog.titre}}</a> <form method="post" action="/form/delete/{{ListBlog.id}}"><input  type="submit" value="X"></form></li>
+        {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

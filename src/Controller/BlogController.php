@@ -4,28 +4,117 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Blog;
+use App\Form\BlogType;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Persistence\ManagerRegistry;
 
 class BlogController extends AbstractController
 {
-    public $listBlog;
-    function __construct()
+    /**
+     * @Route("/blogs")
+     */
+    public function blogs(ManagerRegistry $doctrine)
     {
-        $this->listBlog = array(
-            3 => 'Le blog des éléphants',
-            5 => 'Tous avec les tigres',
-            7 => 'La grande cambrousse'
-        );
-    }
+        $repository = $doctrine->getRepository(Blog::class);
 
-    #[Route('/blog/{id}')]
-    public function blog($id)
-    {
-        return $this->render(
-            'blog.html.twig',
+        $listBlog = $repository->findAll();
+        return $this->render
+        (
+            'blogs.html.twig',
             [
-                'titre' => $this->listBlog[$id],
-                'contenu' => "Voici la liste des blogs:"
+                'titre' => 'Blogs',
+                'contenu' => 'Voici la liste des blogs:'
+                ,'ListBlogs' => $listBlog
             ]
         );
     }
+
+
+    /**
+     * @Route("/blog/{id}")
+     */
+    public function blog($id, ManagerRegistry $doctrine)
+    {
+        $repository = $doctrine->getRepository(Blog::class);
+        $listBlog = $repository->find($id);
+
+        return $this->render(
+            'blog.html.twig',
+            [
+                'blog' => $listBlog
+            ]
+        );
+    }
+
+    /**
+     * @Route("/form")
+     */
+    public function form(Request $request, ManagerRegistry $doctrine)
+    {
+        $blog = new Blog();
+        $blog->setTitre('');
+        $form = $this->createForm(BlogType::class, $blog);
+
+        return $this->render(
+            'form/newBlog.html.twig',
+            [
+                'form' => $form->createView(),
+                'titre' => 'Nouveau Blog'
+            ]
+        );
+    }
+
+    /**
+     * @Route("/form/new")
+     */
+    public function new(Request $request, ManagerRegistry $doctrine)
+    {
+        $blog = new Blog();
+        $blog->setTitre('');
+        $form = $this->createForm(BlogType::class, $blog);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $doctrine->getManager();
+
+            $em->persist($blog);
+            $em->flush();
+            return $this->redirectToRoute('app_blog_blogs');
+        }
+    }
+    /**
+     * @Route("/form/edit/{id<\d+>}")
+     */
+    public function edit(Request $request, Blog $blog, ManagerRegistry $doctrine)
+    {
+        $form = $this->createForm(BlogType::class, $blog);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $doctrine->getManager()->flush();
+        }
+
+        return $this->redirectToRoute('app_blog_blogs');
+    }
+
+    /**
+     * @Route("/form/delete/{id<\d+>}", methods={"POST"})
+     */
+    public function delete($id, ManagerRegistry $doctrine)
+    {
+        $repository = $doctrine->getRepository(Blog::class);
+        $blog = $repository->find($id);
+
+        $em = $doctrine->getManager();
+
+        $em->remove($blog);
+        $em->flush();
+
+        return $this->redirectToRoute('app_blog_blogs');
+    }
+
+
 }

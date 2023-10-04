@@ -16,11 +16,15 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="navbar-brand"  href="/">Accueil</a>
+                        <li class="nav-item">
+                            <a class="nav-link"  href="/">Accueil</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="navbar-brand"  href="/blogs">Liste des blogs</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"  href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blogs</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item"  href="/blogs">List des blogs</a>
+                                <a class="dropdown-item"  href="/form">Ajouter un blog</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
