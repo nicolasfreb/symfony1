@@ -1,4 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <h1>{{ blog.titre }}</h1>
+    <form action="/post/new" method="POST" class ='col-lg-5'>
+        <div class="form-group">
+            <input type="hidden" name="idBlog" value="{{ blog.id }}">
+            <label for="blog_titre" class="required">Ajouter un Commentaire</label>
+            <input type="text" id="poste_contenu" name="contenu" required="required" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Créer</button>
+    </form>
+    {% for poste in listPoste %}
+        <li>{{ poste.date|date("m/d/Y-H:i:s")}} - {{ poste.auteur}} : {{ poste.contenu}}</li>
+    {% endfor %}
 {% endblock %}

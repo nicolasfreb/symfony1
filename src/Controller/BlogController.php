@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Poste;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Blog;
 use App\Form\BlogType;
@@ -37,12 +39,15 @@ class BlogController extends AbstractController
     public function blog($id, ManagerRegistry $doctrine)
     {
         $repository = $doctrine->getRepository(Blog::class);
+        $repository2 = $doctrine->getRepository(Poste::class);
         $listBlog = $repository->find($id);
+        $listPoste = $repository2->findBy(['blogId' => $id],['date' => 'DESC'], 50 );
 
         return $this->render(
             'blog.html.twig',
             [
-                'blog' => $listBlog
+                'blog' => $listBlog,
+                'listPoste' => $listPoste
             ]
         );
     }
@@ -50,7 +55,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/form")
      */
-    public function form(Request $request, ManagerRegistry $doctrine)
+    public function form(ManagerRegistry $doctrine)
     {
         $blog = new Blog();
         $blog->setTitre('');
