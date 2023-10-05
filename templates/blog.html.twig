@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <h1>{{ blog.titre }}</h1>
+    {% for poste in listPoste %}
+        <li>{{ poste.date|date("m/d/Y-H:i:s")}} - {{ poste.auteur}} : {{ poste.contenu}}</li>
+    {% endfor %}
     <form action="/post/new" method="POST" class ='col-lg-5'>
         <div class="form-group">
             <input type="hidden" name="idBlog" value="{{ blog.id }}">
@@ -9,7 +12,4 @@
         </div>
         <button type="submit" class="btn btn-primary">Créer</button>
     </form>
-    {% for poste in listPoste %}
-        <li>{{ poste.date|date("m/d/Y-H:i:s")}} - {{ poste.auteur}} : {{ poste.contenu}}</li>
-    {% endfor %}
 {% endblock %}
